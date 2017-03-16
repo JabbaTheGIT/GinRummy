@@ -25,3 +25,16 @@ let Shuffle (deck:Deck) =
     // Fixme: change so that it returns a shuffled deck
 
 // Add other functions here related to Card Games ...
+let CardValue (card:Card) = 
+    match card.rank with
+    | Ace -> 1
+    | Two -> 2
+    | Three -> 3
+    | Four -> 4
+    | Five -> 5
+    | Six -> 6
+    | Seven -> 7
+    | Eight -> 8
+    | Nine -> 8
+    | _ -> 10
+
