@@ -16,25 +16,40 @@ let allCards =
             for r in AllRanks do
                 yield {suit=s; rank=r}
     }
-
+    
 let FullDeck = 
     allCards
 
-let Shuffle (deck:Deck) = 
-    deck
+//Random Function
+let rnd = System.Random()
+
+//Get random card from a list
+//Length issue
+let rndCard (cardList:List<Card>) =     
+    List.nth cardList (rnd.Next(List.length cardList))
+
+let addCard list card = 
+    List.append list [card]
+
+let rec removeCard list card = 
+    match list with
+    | h :: tail when h = card -> tail
+    | h :: tail -> h :: (removeCard tail card)
+    | [] -> [] 
+
+let rec shuff list =
+    let card = rndCard list
+    seq {yield card;     
+         yield! shuff (removeCard list card)}
+
+
+//Shuffle the deck
+let Shuffle (deck:Deck) =  
+    shuff (Seq.toList deck)
+    |> Seq.take 52
     // Fixme: change so that it returns a shuffled deck
 
 // Add other functions here related to Card Games ...
-let CardValue (card:Card) = 
-    match card.rank with
-    | Ace -> 1
-    | Two -> 2
-    | Three -> 3
-    | Four -> 4
-    | Five -> 5
-    | Six -> 6
-    | Seven -> 7
-    | Eight -> 8
-    | Nine -> 8
-    | _ -> 10
-
+    
+let printSqn mySeq = 
+    printfn "%A" (Seq.toList mySeq)
