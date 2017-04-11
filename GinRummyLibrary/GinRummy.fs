@@ -4,6 +4,7 @@ open Cards
 
 type Sets = { rank: Rank; hasSet: bool }
 type Runs = { suit: Suit; hasRun: bool }
+type HasNextCardRun = { suits: Suit; ranks: Rank; hasNext: bool }
 
 // Add helper functions to help compute Deadwood function
 let CardValue (card:Card) = 
@@ -18,6 +19,22 @@ let CardValue (card:Card) =
     | Eight -> 8
     | Nine -> 9
     | _ -> 10
+
+let nextRank (card:Card) =
+    match card.rank with
+    | Ace ->  {rank=Two; suit= card.suit}
+    | Two -> {rank=Three; suit= card.suit}
+    | Three -> {rank=Four; suit= card.suit}
+    | Four -> {rank=Five; suit= card.suit}
+    | Five -> {rank=Six; suit= card.suit}
+    | Six -> {rank=Seven; suit= card.suit}
+    | Seven -> {rank=Eight; suit= card.suit}
+    | Eight -> {rank=Nine; suit= card.suit}
+    | Nine -> {rank=Ten; suit= card.suit}
+    | Ten -> {rank=Jack; suit= card.suit}
+    | Jack -> {rank=Queen; suit= card.suit}
+    | Queen -> {rank=King; suit= card.suit}
+    | King -> card
 
 let totalSuit (hand:Hand) suit =
     Seq.filter (fun (x:Card) -> x.suit = suit) hand
@@ -59,7 +76,11 @@ let checkHandPotentialForRuns (hand:Hand) =
     Seq.map (fun x -> cardHasRun hand run x) hand
     |> Seq.distinct
 
+let hasCard (hand:Hand) (card:Card) =
+    Seq.exists ((=) card) hand
 
+let handHas (hand:Hand) = 
+    Seq.map(fun x -> hasCard hand (nextRank x)) hand
 
 let Deadwood (hand:Hand) = 
     totalValue hand
