@@ -36,6 +36,13 @@ let nextRank (card:Card) =
     | Queen -> {rank=King; suit= card.suit}
     | King -> card
 
+
+//total value of a hand
+let totalValue (hand:Hand) =
+    Seq.map (fun x -> CardValue x) hand
+    |> Seq.sum
+
+//checks if card rank or suit has potential for run or set
 let totalSuit (hand:Hand) suit =
     Seq.filter (fun (x:Card) -> x.suit = suit) hand
     |> Seq.length
@@ -43,10 +50,6 @@ let totalSuit (hand:Hand) suit =
 let totalRank (hand:Hand) rank =
     Seq.filter (fun (x:Card) -> x.rank = rank) hand
     |> Seq.length
-
-let totalValue (hand:Hand) =
-    Seq.map (fun x -> CardValue x) hand
-    |> Seq.sum
 
 let rankHasSet (hand:Hand) (card:Card) =
     ((totalRank hand card.rank) > 2)
@@ -57,20 +60,19 @@ let suitHasRun (hand:Hand) (card:Card) =
 //adds a Set to a sequence if it has a set
 let cardHasSet (hand:Hand) set card =
     match (rankHasSet hand card) with
-    | true -> { rank = card.rank; hasSet = true } :: set
+    | true -> card :: set
     | false -> set
+
+let handSets (hand:Hand) =
+    let cards = List.empty<Card>
+    Seq.map(fun x -> cardHasSet hand cards x) hand
 
 let cardHasRun (hand:Hand) run card =
     match (suitHasRun hand card) with
     | true -> { suit = card.suit; hasRun = true } :: run
     | false -> run
 
-//returns a sequence of ranks with sets        
-let checkHandForSets (hand:Hand) =
-    let set = List.empty<Sets>
-    Seq.map (fun x -> cardHasSet hand set x) hand
-    |> Seq.distinct        
-
+//returns a sequence of ranks with sets            
 let checkHandPotentialForRuns (hand:Hand) =
     let run = List.empty<Runs>
     Seq.map (fun x -> cardHasRun hand run x) hand
@@ -79,7 +81,7 @@ let checkHandPotentialForRuns (hand:Hand) =
 let hasCard (hand:Hand) (card:Card) =
     Seq.exists ((=) card) hand
 
-let handHas (hand:Hand) = 
+let hasHand (hand:Hand) = 
     Seq.map(fun x -> hasCard hand (nextRank x)) hand
 
 let Deadwood (hand:Hand) = 
