@@ -47,7 +47,6 @@ let rec shuff list =
 let Shuffle (deck:Deck) =  
     shuff (Seq.toList deck)
     |> Seq.take 52
-    // Fixme: change so that it returns a shuffled deck
 
 // Add other functions here related to Card Games ...
     
