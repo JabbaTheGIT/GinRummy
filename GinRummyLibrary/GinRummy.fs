@@ -75,7 +75,7 @@ let cardHasSet (hand:Hand) set card =
     | true -> card :: set
     | false -> set
 
-let handSets (hand:Hand) =
+let handSets (hand:Hand):Hand =
     let cards = List.empty<Card>
     Seq.map(fun x -> cardHasSet hand cards x) hand
     |> Seq.filter (fun x -> x.Length > 0)
@@ -108,11 +108,42 @@ let previousCards (hand:Hand) =
 let centerCard (hand:Hand) =
      Seq.filter(fun x -> (nextRankExists hand x && previousRankExists hand x)) hand
 
-let handRuns (hand:Hand) =
+let handRuns (hand:Hand):Hand =
     Seq.append (centerCard hand) (nextCards hand)
     |> Seq.append (previousCards hand)
     |> Seq.sortBy(fun x -> x.suit, x.rank)
     |> Seq.distinct
+
+//Remove cards from hand
+let removeCards(hand:Hand) (cards:Hand) =
+    Seq.filter(fun x -> if (cardExists cards x) then false else true) hand
+
+let runReduce (hand:Hand):Hand =
+    handRuns hand
+    |> removeCards hand
+    |> Seq.sortBy(fun x -> x.suit, x.rank)
+
+let setReduce (hand:Hand):Hand =
+    handSets hand
+    |> removeCards hand
+    |> Seq.sortBy(fun x -> x.suit, x.rank)
+
+//Remove runs first or sets first and return value
+let removeSetsFirst (hand:Hand) =
+    setReduce hand
+    |> runReduce
+    |> totalValue
+
+let removeRunsFirst (hand:Hand) =
+    runReduce hand
+    |> setReduce
+    |> totalValue
+
+//Compare what gives best result
+let bestResult (hand:Hand) =
+    match (removeSetsFirst hand > removeRunsFirst hand) with
+    | true -> removeRunsFirst hand
+    | false -> removeSetsFirst hand
 
 //Values of sets and Runs
 let setValue (hand:Hand) =
@@ -120,7 +151,6 @@ let setValue (hand:Hand) =
 
 let runValue (hand:Hand) =
     totalValue (handRuns hand)
-
 
 //Deadwood score
 let Deadwood (hand:Hand) = 
