@@ -96,21 +96,23 @@ let nextRankExists (hand:Hand) card =
     | true -> false
     | false -> cardExists hand (nextRank card)
 
-//Potential fix split cards into sequences of suits then sort them in the sequnces
-//adding to new sequence until card doesn't have next
-let hasNextCard (hand:Hand) = 
-    Seq.filter(fun x -> nextRankExists hand x) hand
-    |> Seq.append (Seq.filter(fun x -> previousRankExists hand x) hand)
-    |> Seq.sortBy(fun x -> x.suit, x.rank)
-    |> Seq.distinct
+//returns a sequence of cards that are in a run in the hand
+let nextCards (hand:Hand) =
+    Seq.filter(fun x -> (nextRankExists hand x && previousRankExists hand x)) hand
+    |> Seq.map(fun x -> nextRank x)
 
-let potentialRuns (hand:Hand) =
-    Seq.filter (fun x -> (suitHasRun hand x)) hand
-    |> Seq.sortBy (fun x-> x.suit, x.rank)
+let previousCards (hand:Hand) =
+    Seq.filter(fun x -> (nextRankExists hand x && previousRankExists hand x)) hand
+    |> Seq.map(fun x -> previousRank x)
+
+let centerCard (hand:Hand) =
+     Seq.filter(fun x -> (nextRankExists hand x && previousRankExists hand x)) hand
 
 let handRuns (hand:Hand) =
-    hasNextCard hand
-    |> potentialRuns
+    Seq.append (centerCard hand) (nextCards hand)
+    |> Seq.append (previousCards hand)
+    |> Seq.sortBy(fun x -> x.suit, x.rank)
+    |> Seq.distinct
 
 //Values of sets and Runs
 let setValue (hand:Hand) =
