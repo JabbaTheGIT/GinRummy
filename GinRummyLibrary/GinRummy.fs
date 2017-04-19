@@ -140,10 +140,15 @@ let removeRunsFirst (hand:Hand) =
     |> totalValue
 
 //Compare what gives best result
-let bestResult (hand:Hand) =
+let simpleResult (hand:Hand) =
     match (removeSetsFirst hand > removeRunsFirst hand) with
     | true -> removeRunsFirst hand
     | false -> removeSetsFirst hand
+
+//Break runs to suits
+let sequenceOfSuits (hand:Hand) (suit:Suit) =
+    Seq.filter(fun x -> x.suit = suit) hand
+    |> handRuns
 
 //Values of sets and Runs
 let setValue (hand:Hand) =
@@ -154,11 +159,13 @@ let runValue (hand:Hand) =
 
 //Deadwood score
 let Deadwood (hand:Hand) = 
-    totalValue hand
+    match Seq.length hand with
+    | 10 -> simpleResult hand
+    | _ -> totalValue hand
     // Fixme change so that it computes the actual deadwood score
 
 let Score (firstOut:Hand) (secondOut:Hand) =
-    0
+    Deadwood firstOut - Deadwood secondOut
     // Fixme change so that it computes how many points should be scored by the firstOut hand
     // (score should be negative if the secondOut hand is the winner)
 
