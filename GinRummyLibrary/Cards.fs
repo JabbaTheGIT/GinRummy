@@ -23,6 +23,12 @@ let FullDeck =
 //Random Function
 let rnd = System.Random()
 
+//Given Check duplicates function
+let CheckDuplicates cards = 
+    let duplicates = cards |> Seq.groupBy id |> Seq.map snd |> Seq.exists (fun s -> (Seq.length s) > 1)
+    if (duplicates) then
+        raise(new System.Exception "duplicates found!")
+
 //Get random card from a list
 //Length issue
 let rndCard (cardList:List<Card>) =     

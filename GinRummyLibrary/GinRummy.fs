@@ -160,12 +160,19 @@ let runValue (hand:Hand) =
 //Deadwood score
 let Deadwood (hand:Hand) = 
     match Seq.length hand with
-    | 10 -> simpleResult hand
+    | i when i = 10 || i = 11 -> simpleResult hand
     | _ -> totalValue hand
     // Fixme change so that it computes the actual deadwood score
 
+let knockScore (firstHand:Hand) (secondHand:Hand) =
+    match (Deadwood firstHand - Deadwood secondHand) with
+        | i when i < 0 -> Deadwood secondHand - Deadwood firstHand
+        | i when i >= 0 -> -25 + (Deadwood secondHand - Deadwood firstHand)
+
 let Score (firstOut:Hand) (secondOut:Hand) =
-    Deadwood firstOut - Deadwood secondOut
+    match (Deadwood firstOut) with
+    | i when i = 0 -> 25 + Deadwood secondOut
+    | _ -> knockScore firstOut secondOut
     // Fixme change so that it computes how many points should be scored by the firstOut hand
     // (score should be negative if the secondOut hand is the winner)
 
