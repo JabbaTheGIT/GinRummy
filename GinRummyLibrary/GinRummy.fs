@@ -121,12 +121,45 @@ let removeCards(hand:Hand) (cards:Hand) =
 let runReduce (hand:Hand):Hand =
     handRuns hand
     |> removeCards hand
-    |> Seq.sortBy(fun x -> x.suit, x.rank)
+
 
 let setReduce (hand:Hand):Hand =
     handSets hand
     |> removeCards hand
-    |> Seq.sortBy(fun x -> x.suit, x.rank)
+
+
+//all posible
+let rec combinationOfCards num list =
+  match (num,list) with
+  | (0,_) -> [[]]
+  | (_,[]) -> []
+  | (num,head::tail) ->
+      let listHead = List.map (fun list -> head::list) (combinationOfCards (num-1) tail)
+      let listTail = combinationOfCards num tail
+      listHead @ listTail    
+
+let runsFromList (hand:list<list<Card>>) =
+    List.map(fun x -> handRuns x) hand
+    |> List.toSeq
+    |> Seq.filter(fun x -> (Seq.length x > 0))
+
+let getPossibles (hand:Hand) (suit:Suit) number =
+    Seq.filter (fun x -> x.suit = suit) hand
+    |> Seq.toList
+    |> combinationOfCards number
+    |> List.sort
+    |> runsFromList
+
+let allPossibleCombinations (hand:Hand):seq<Hand> =
+    let runs = [3;4;5]
+    let funcs counter = 
+        Seq.map (fun x -> getPossibles hand x counter) AllSuits
+        |> Seq.filter(fun x -> (Seq.length x > 0))
+        |> Seq.concat
+    let all_runs = List.map funcs runs
+    Seq.concat all_runs
+
+
 
 //Remove runs first or sets first and return value
 let removeSetsFirst (hand:Hand) =
@@ -144,6 +177,14 @@ let simpleResult (hand:Hand) =
     match (removeSetsFirst hand > removeRunsFirst hand) with
     | true -> removeRunsFirst hand
     | false -> removeSetsFirst hand
+
+let dodgeTest (hand:Hand) =
+    allPossibleCombinations hand
+    |> Seq.map(fun x -> removeCards hand x)
+    |> Seq.map(fun x -> Seq.sortBy(fun y -> y.suit, y.rank) x)
+    |> Seq.map(fun x -> setReduce x)
+    |> Seq.map(fun x -> printSqn x)
+
 
 //Break runs to suits
 let sequenceOfSuits (hand:Hand) (suit:Suit) =
