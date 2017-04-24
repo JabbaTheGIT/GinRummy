@@ -143,23 +143,18 @@ let runsFromList (hand:list<list<Card>>) =
     |> List.toSeq
     |> Seq.filter(fun x -> (Seq.length x > 0))
 
-let getPossibles (hand:Hand) (suit:Suit) number =
-    Seq.filter (fun x -> x.suit = suit) hand
-    |> Seq.toList
+let getPossibles (hand:Hand) number = 
+    Seq.toList hand
     |> combinationOfCards number
     |> List.sort
     |> runsFromList
 
-let allPossibleCombinations (hand:Hand):seq<Hand> =
-    let runs = [3;4;5]
-    let funcs counter = 
-        Seq.map (fun x -> getPossibles hand x counter) AllSuits
-        |> Seq.filter(fun x -> (Seq.length x > 0))
-        |> Seq.concat
-    let all_runs = List.map funcs runs
-    Seq.concat all_runs
-
-
+let allPosCombs (hand:Hand) =
+    let runs = [3;4;5;6;7;8;9;10;11]
+    Seq.map (fun x -> getPossibles hand x) runs
+    |> Seq.filter(fun x -> (Seq.length x > 0))
+    |> Seq.concat
+    |> Seq.distinct
 
 //Remove runs first or sets first and return value
 let removeSetsFirst (hand:Hand) =
@@ -178,12 +173,22 @@ let simpleResult (hand:Hand) =
     | true -> removeRunsFirst hand
     | false -> removeSetsFirst hand
 
-let dodgeTest (hand:Hand) =
-    allPossibleCombinations hand
+let complexResult (hand:Hand) =
+    allPosCombs hand
     |> Seq.map(fun x -> removeCards hand x)
-    |> Seq.map(fun x -> Seq.sortBy(fun y -> y.suit, y.rank) x)
     |> Seq.map(fun x -> setReduce x)
-    |> Seq.map(fun x -> printSqn x)
+    |> Seq.map(fun x -> totalValue x) 
+    |> Seq.min    
+
+let returnLowest (hand:Hand) =
+    let s = allPosCombs hand
+    if (Seq.isEmpty s) then
+        simpleResult hand
+    else
+        if (complexResult hand < simpleResult hand) then
+            complexResult hand
+        else 
+            simpleResult hand
 
 
 //Break runs to suits
@@ -201,19 +206,21 @@ let runValue (hand:Hand) =
 //Deadwood score
 let Deadwood (hand:Hand) = 
     match Seq.length hand with
-    | i when i = 10 || i = 11 -> simpleResult hand
+    | i when i = 10 || i = 11 -> returnLowest hand
     | _ -> totalValue hand
     // Fixme change so that it computes the actual deadwood score
 
-let knockScore (firstHand:Hand) (secondHand:Hand) =
-    match (Deadwood firstHand - Deadwood secondHand) with
-        | i when i < 0 -> Deadwood secondHand - Deadwood firstHand
-        | i when i >= 0 -> -25 + (Deadwood secondHand - Deadwood firstHand)
+let knockScore firstHand secondHand =
+    match (firstHand - secondHand) with
+        | i when i < 0 -> secondHand - firstHand
+        | i when i >= 0 -> -25 + (secondHand - firstHand)
 
 let Score (firstOut:Hand) (secondOut:Hand) =
-    match (Deadwood firstOut) with
-    | i when i = 0 -> 25 + Deadwood secondOut
-    | _ -> knockScore firstOut secondOut
+    let first = Deadwood firstOut
+    let second = Deadwood secondOut
+    match (first) with
+    | i when i = 0 -> 25 + second
+    | _ -> knockScore first second
     // Fixme change so that it computes how many points should be scored by the firstOut hand
     // (score should be negative if the secondOut hand is the winner)
 

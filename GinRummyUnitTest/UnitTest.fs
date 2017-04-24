@@ -127,35 +127,35 @@ type PickupTest() =
     [<TestMethod>] member x.Pickup30() = Assert.IsTrue(ComputerPlayer.ComputerPickupDiscard Hand98 HK Deck02)
 
 
-[<TestClass>]
-type DiscardTest() = 
-    [<TestMethod>] 
-    member x.Discard01() = 
-        let (move,discard) = ComputerPlayer.ComputerMove Hand64
-        Assert.AreEqual(ComputerPlayer.Continue, move)
-        Assert.AreEqual(Some H10, discard)
-    [<TestMethod>] 
-    member x.Discard02() = 
-        let (move,discard) = ComputerPlayer.ComputerMove Hand37
-        Assert.AreEqual(ComputerPlayer.Continue, move)
-        Assert.AreEqual(Some C8, discard)
-    [<TestMethod>] 
-    member x.Discard03() = 
-        let (move,discard) = ComputerPlayer.ComputerMove Hand20
-        Assert.AreEqual(ComputerPlayer.Continue, move)
-        Assert.AreEqual(Some D8, discard)
-    [<TestMethod>] 
-    member x.Discard04() = 
-        let (move,discard) = ComputerPlayer.ComputerMove Hand18
-        Assert.AreEqual(ComputerPlayer.Knock, move)
-        Assert.AreEqual(Some C9, discard)
-    [<TestMethod>] 
-    member x.Discard05() = 
-        let (move,discard) = ComputerPlayer.ComputerMove Hand02
-        Assert.AreEqual(ComputerPlayer.Gin, move)
-        Assert.AreEqual(Some S2, discard)
-    [<TestMethod>] 
-    member x.Discard06() = 
-        let (move,discard) = ComputerPlayer.ComputerMove Gin04
-        Assert.AreEqual(ComputerPlayer.Gin, move)
-        Assert.AreEqual(None, discard)
+//[<TestClass>]
+//type DiscardTest() = 
+//    [<TestMethod>] 
+//    member x.Discard01() = 
+//        let (move,discard) = ComputerPlayer.ComputerMove Hand64
+//        Assert.AreEqual(ComputerPlayer.Continue, move)
+//        Assert.AreEqual(Some H10, discard)
+//    [<TestMethod>] 
+//    member x.Discard02() = 
+//        let (move,discard) = ComputerPlayer.ComputerMove Hand37
+//        Assert.AreEqual(ComputerPlayer.Continue, move)
+//        Assert.AreEqual(Some C8, discard)
+//    [<TestMethod>] 
+//    member x.Discard03() = 
+//        let (move,discard) = ComputerPlayer.ComputerMove Hand20
+//        Assert.AreEqual(ComputerPlayer.Continue, move)
+//        Assert.AreEqual(Some D8, discard)
+//    [<TestMethod>] 
+//    member x.Discard04() = 
+//        let (move,discard) = ComputerPlayer.ComputerMove Hand18
+//        Assert.AreEqual(ComputerPlayer.Knock, move)
+//        Assert.AreEqual(Some C9, discard)
+//    [<TestMethod>] 
+//    member x.Discard05() = 
+//        let (move,discard) = ComputerPlayer.ComputerMove Hand02
+//        Assert.AreEqual(ComputerPlayer.Gin, move)
+//        Assert.AreEqual(Some S2, discard)
+//    [<TestMethod>] 
+//    member x.Discard06() = 
+//        let (move,discard) = ComputerPlayer.ComputerMove Gin04
+//        Assert.AreEqual(ComputerPlayer.Gin, move)
+//        Assert.AreEqual(None, discard)
