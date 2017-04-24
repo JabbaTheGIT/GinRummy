@@ -3,3 +3,8 @@ C:\QUT\Year3\Sem1\CAB402\Assignments\GinRummySkeleton\bin\GinRummyLibrary.pdb
 C:\QUT\Year3\Sem1\CAB402\Assignments\GinRummySkeleton\bin\GinRummyLibrary.XML
 C:\QUT\Year3\Sem1\CAB402\Assignments\GinRummySkeleton\GinRummyLibrary\obj\Debug\GinRummyLibrary.dll
 C:\QUT\Year3\Sem1\CAB402\Assignments\GinRummySkeleton\GinRummyLibrary\obj\Debug\GinRummyLibrary.pdb
+C:\QUT\Year3\Sem1\CAB402\Assignments\n9425438_Gwilt_GinRummy\bin\GinRummyLibrary.dll
+C:\QUT\Year3\Sem1\CAB402\Assignments\n9425438_Gwilt_GinRummy\bin\GinRummyLibrary.pdb
+C:\QUT\Year3\Sem1\CAB402\Assignments\n9425438_Gwilt_GinRummy\bin\GinRummyLibrary.XML
+C:\QUT\Year3\Sem1\CAB402\Assignments\n9425438_Gwilt_GinRummy\GinRummyLibrary\obj\Debug\GinRummyLibrary.dll
+C:\QUT\Year3\Sem1\CAB402\Assignments\n9425438_Gwilt_GinRummy\GinRummyLibrary\obj\Debug\GinRummyLibrary.pdb

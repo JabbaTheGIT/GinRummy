@@ -506,14 +506,6 @@
             <param name="context">The context for the interaction request.</param>
             <param name="callback">The callback to execute when the interaction is completed.</param>
         </member>
-        <member name="M:Prism.Interactivity.InteractionRequest.InteractionRequest`1.RaiseAsync(`0)">
-            <summary>
-            Fires the Raised event asynchronously. Please note that this request may never return
-            if the InteractionRequest is unhandled.
-            </summary>
-            <param name="context">The context for the interaction request.</param>
-            <returns>The context after the request has been handled by the UI.</returns>
-        </member>
         <member name="T:Prism.Interactivity.InteractionRequest.InteractionRequestedEventArgs">
             <summary>
             Event args for the <see cref="E:Prism.Interactivity.InteractionRequest.IInteractionRequest.Raised"/> event.
@@ -662,6 +654,11 @@
             The content of the child window to display as part of the popup.
             </summary>
         </member>
+        <member name="F:Prism.Interactivity.PopupWindowAction.WindowContentTypeProperty">
+            <summary>
+            The type of content of the child window to display as part of the popup.
+            </summary>
+        </member>
         <member name="F:Prism.Interactivity.PopupWindowAction.IsModalProperty">
             <summary>
             Determines if the content should be shown in a modal window or not.
@@ -685,6 +682,11 @@
         <member name="P:Prism.Interactivity.PopupWindowAction.WindowContent">
             <summary>
             Gets or sets the content of the window.
+            </summary>
+        </member>
+        <member name="P:Prism.Interactivity.PopupWindowAction.WindowContentType">
+            <summary>
+            Gets or sets the type of content of the window.
             </summary>
         </member>
         <member name="P:Prism.Interactivity.PopupWindowAction.IsModal">
@@ -3725,12 +3727,12 @@
         </member>
         <member name="M:Prism.Regions.IRegionManager.RegisterViewWithRegion(System.String,System.Func{System.Object})">
             <summary>
-            Associate a view with a region, using a delegate to resolve a concreate instance of the view. 
-            When the region get's displayed, this delelgate will be called and the result will be added to the
+            Associate a view with a region, using a delegate to resolve a concrete instance of the view. 
+            When the region get's displayed, this delegate will be called and the result will be added to the
             views collection of the region. 
             </summary>
             <param name="regionName">The name of the region to associate the view with.</param>
-            <param name="getContentDelegate">The delegate used to resolve a concreate instance of the view.</param>
+            <param name="getContentDelegate">The delegate used to resolve a concrete instance of the view.</param>
             <returns>The regionmanager, for adding several views easily</returns>
         </member>
         <member name="M:Prism.Regions.IRegionManager.RequestNavigate(System.String,System.Uri,System.Action{Prism.Regions.NavigationResult})">
@@ -4789,12 +4791,12 @@
         </member>
         <member name="M:Prism.Regions.RegionManager.RegisterViewWithRegion(System.String,System.Func{System.Object})">
             <summary>
-            Associate a view with a region, using a delegate to resolve a concreate instance of the view.
-            When the region get's displayed, this delelgate will be called and the result will be added to the
+            Associate a view with a region, using a delegate to resolve a concrete instance of the view.
+            When the region get's displayed, this delegate will be called and the result will be added to the
             views collection of the region.
             </summary>
             <param name="regionName">The name of the region to associate the view with.</param>
-            <param name="getContentDelegate">The delegate used to resolve a concreate instance of the view.</param>
+            <param name="getContentDelegate">The delegate used to resolve a concrete instance of the view.</param>
             <returns>The regionmanager, for adding several views easily</returns>
         </member>
         <member name="M:Prism.Regions.RegionManager.RequestNavigate(System.String,System.Uri,System.Action{Prism.Regions.NavigationResult})">

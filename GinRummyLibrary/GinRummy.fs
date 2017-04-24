@@ -60,8 +60,10 @@ let totalSuit (hand:Hand) suit =
     |> Seq.length
 
 let totalRank (hand:Hand) rank =
-    Seq.filter (fun (x:Card) -> x.rank = rank) hand
-    |> Seq.length
+    let length = Seq.filter (fun (x:Card) -> x.rank = rank) hand
+    match (Seq.isEmpty length) with
+    | true -> 0
+    | false -> Seq.length length
 
 let rankHasSet (hand:Hand) (card:Card) =
     ((totalRank hand card.rank) > 2)
@@ -79,8 +81,7 @@ let handSets (hand:Hand):Hand =
     let cards = List.empty<Card>
     Seq.map(fun x -> cardHasSet hand cards x) hand
     |> Seq.filter (fun x -> x.Length > 0)
-    |> Seq.concat 
-    |> Seq.sortBy (fun x -> x.rank)
+    |> Seq.concat
 
 //returns a sequence of cards that are in runs
 let cardExists (hand:Hand) (card:Card) =
@@ -126,7 +127,6 @@ let runReduce (hand:Hand):Hand =
 let setReduce (hand:Hand):Hand =
     handSets hand
     |> removeCards hand
-
 
 //all posible
 let rec combinationOfCards num list =
@@ -190,19 +190,6 @@ let returnLowest (hand:Hand) =
         else 
             simpleResult hand
 
-
-//Break runs to suits
-let sequenceOfSuits (hand:Hand) (suit:Suit) =
-    Seq.filter(fun x -> x.suit = suit) hand
-    |> handRuns
-
-//Values of sets and Runs
-let setValue (hand:Hand) =
-    totalValue (handSets hand)
-
-let runValue (hand:Hand) =
-    totalValue (handRuns hand)
-
 //Deadwood score
 let Deadwood (hand:Hand) = 
     match Seq.length hand with
@@ -221,7 +208,3 @@ let Score (firstOut:Hand) (secondOut:Hand) =
     match (first) with
     | i when i = 0 -> 25 + second
     | _ -> knockScore first second
-    // Fixme change so that it computes how many points should be scored by the firstOut hand
-    // (score should be negative if the secondOut hand is the winner)
-
-// Add other functions related to Gin Rummy here ...
